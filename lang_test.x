@@ -2,9 +2,9 @@ Factorial calculation
 
 ===============================================   // Divider between name and variable declaration
 
-==> input_num int        // Input indicated with incoming arrow
-==> input_string string
-<== result int           // Output indicated with outgoing arrow
+-> input_num int        // Input indicated with incoming arrow
+-> input_string string
+<- result int           // Output indicated with outgoing arrow
 some_string   string
 random_float  float
 
