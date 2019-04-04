@@ -1,47 +1,47 @@
-Programm :== NamenTeil '\n' TeilSeparator '\n' VariablenTeil '\n' TeilSeparator '\n' CodeTeil.
-TeilSeparator :== '===' {'='}.
+Programm ::= NamenTeil '\n' TeilSeparator '\n' VariablenTeil '\n' TeilSeparator '\n' CodeTeil.
+TeilSeparator ::= '===' {'='}.
 
-NamenTeil :== {Zeichen}.
+NamenTeil ::= {Zeichen}.
 
-VariablenTeil :== {Variable '\n'}.
-Variable :== [ImportExportFlag] VariablenName VariablenTyp.
-ImportExportFlag :== ImportFlag | ExportFlag.
-ImportFlag :== '->'.
-ExportFlag :== '<-'.
-VariablenName :== Buchstabe {Zeichen}.
-VariablenTyp :== 'int' | 'float' | 'string'.
+VariablenTeil ::= {Variable '\n'}.
+Variable ::= [ImportExportFlag] VariablenName VariablenTyp.
+ImportExportFlag ::= ImportFlag | ExportFlag.
+ImportFlag ::= '->'.
+ExportFlag ::= '<-'.
+VariablenName ::= Buchstabe {Zeichen}.
+VariablenTyp ::= 'int' | 'float' | 'string'.
 
-CodeTeil :== {Instruktion}.
-Instruktion :== (Zuweisung '\n') | Verzweigung | (Kommentar '\n).
-Kommentar :== '//' {Zeichen}.
+CodeTeil ::= {Instruktion}.
+Instruktion ::= (Zuweisung '\n') | Verzweigung | (Kommentar '\n).
+Kommentar ::= '//' {Zeichen}.
 
-Zuweisung :== VariablenName '=' EvaluationsWert.
-EvaluationsWert :== Wert | Addition | Subtraktion | Multiplikation | Division.
-Wert :== VariablenName | Konstante.
-Konstante :== String | Int | Float.
-Addition :== EvaluationsWert '+' EvaluationsWert.
-Subtraktion :== EvaluationsWert '-' EvaluationsWert.
-Multiplikation :== EvaluationsWert '*' EvaluationsWert.
-Division :== EvaluationsWert '/' EvaluationsWert.
+Zuweisung ::= VariablenName '=' EvaluationsWert.
+EvaluationsWert ::= Wert | Addition | Subtraktion | Multiplikation | Division.
+Wert ::= VariablenName | Konstante.
+Konstante ::= String | Int | Float.
+Addition ::= EvaluationsWert '+' EvaluationsWert.
+Subtraktion ::= EvaluationsWert '-' EvaluationsWert.
+Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
+Division ::= EvaluationsWert '/' EvaluationsWert.
 
-Verzweigung :== IfVerzweigung | WhileVerzweigung | ForVerzweigung.
-InstruktionsBlock :== '{' {Instruktion} '}'.
+Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
+InstruktionsBlock ::= '{' {Instruktion} '}'.
 
-IfVerzweigung :== 'if' Vergleich InstruktionsBlock {ElseIfVerzweigung} [ElseVerzweigung].
-Vergleich :== GleichheitsVergleich | UngleichheitsVergleich | KleinerVergleich | GrößerVerlgleich.
-GleichheitsVergleich :== EvaluationsWert '==' EvaluationsWert.
-UngleichheitsVergleich :== EvaluationsWert '!=' EvaluationsWert.
-KleinerVergleich :== EvaluationsWert '<' EvaluationsWert.
-GrößerVerlgleich :== EvaluationsWert '>' EvaluationsWert.
-ElseIfVerzweigung :== 'else if' Vergleich InstruktionsBlock.
-ElseVerzweigung :== 'else' InstruktionsBlock.
+IfVerzweigung ::= 'if' Vergleich InstruktionsBlock {ElseIfVerzweigung} [ElseVerzweigung].
+Vergleich ::= GleichheitsVergleich | UngleichheitsVergleich | KleinerVergleich | GrößerVerlgleich.
+GleichheitsVergleich ::= EvaluationsWert '==' EvaluationsWert.
+UngleichheitsVergleich ::= EvaluationsWert '!=' EvaluationsWert.
+KleinerVergleich ::= EvaluationsWert '<' EvaluationsWert.
+GrößerVerlgleich ::= EvaluationsWert '>' EvaluationsWert.
+ElseIfVerzweigung ::= 'else if' Vergleich InstruktionsBlock.
+ElseVerzweigung ::= 'else' InstruktionsBlock.
 
-WhileVerzweigung :== 'while' Vergleich InstruktionsBlock.
-ForVerzweigung :== 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
+WhileVerzweigung ::= 'while' Vergleich InstruktionsBlock.
+ForVerzweigung ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
 
 Zeichen := Buchstabe | Ziffer
-Buchstabe :== 'A'|...|'Z'|'a'|...|'z'.
-Ziffer :== '0'|...|'9'.
-String :== ('''|'"') {Zeichen} ('''|'"').
-Int :== Ziffer {Ziffer}.
-Float :== Ziffer {Ziffer} '.' Ziffer {Ziffer}.
+Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.
+Ziffer ::= '0'|...|'9'.
+String ::= ('''|'"') {Zeichen} ('''|'"').
+Int ::= Ziffer {Ziffer}.
+Float ::= Ziffer {Ziffer} '.' Ziffer {Ziffer}.
