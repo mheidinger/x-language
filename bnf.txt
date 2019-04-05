@@ -1,0 +1,74 @@
+Programm ::= NamenTeil '\n'
+						 TeilSeparator '\n'
+						 VariablenTeil '\n'
+						 TeilSeparator '\n'
+						 CodeTeil.
+TeilSeparator ::= '==' TeilSeparatorZeichen.
+TeilSeparatorZeichen ::= '=' | ('=' TeilSeparatorZeichen).
+
+NamenTeil ::= Zeichen | (Zeichen NamenTeil).
+
+VariablenTeil ::= Variable | (Variable '\n' VariablenTeil).
+Variable ::= (ImportExportFlag ' ' VariablenName ' ' VariablenTyp)
+						 | (VariablenName ' ' VariablenTyp).
+ImportExportFlag ::= ImportFlag | ExportFlag.
+ImportFlag ::= '->'.
+ExportFlag ::= '<-'.
+VariablenName ::= Buchstabe | Buchstabe Bezeichner.
+VariablenTyp ::= 'int' | 'float' | 'string'.
+
+CodeTeil ::= Instruktion | Instruktion CodeTeil.
+Instruktion ::= (Zuweisung '\n') | Verzweigung | (Kommentar '\n').
+Kommentar ::= '//' | '//' Zeichenfolge.
+
+Zuweisung ::= VariablenName '=' EvaluationsWert.
+EvaluationsWert ::= Wert
+										| Addition
+										| Subtraktion
+										| Multiplikation
+										| Division.
+Wert ::= VariablenName | Literal.
+Literal ::= String | Int | Float.
+Addition ::= EvaluationsWert '+' EvaluationsWert.
+Subtraktion ::= EvaluationsWert '-' EvaluationsWert.
+Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
+Division ::= EvaluationsWert '/' EvaluationsWert.
+
+Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
+InstruktionsBlock ::= '{' InstruktionsListe '}'.
+InstruktionsListe ::= Instruktion | Instruktion InstruktionsListe.
+
+IfVerzweigung ::= ('if' Vergleich InstruktionsBlock)
+									| ('if' ' ' Vergleich InstruktionsBlock ElseVerzweigung)
+									| ('if' ' ' Vergleich InstruktionsBlock ElseIfVerzweigungen)
+									| ('if' ' ' Vergleich InstruktionsBlock
+											ElseIfVerzweigungen ElseVerzweigung).
+Vergleich ::= GleichheitsVergleich
+							| UngleichheitsVergleich
+							| KleinerVergleich
+							| GroesserVerlgleich.
+GleichheitsVergleich ::= EvaluationsWert '==' EvaluationsWert.
+UngleichheitsVergleich ::= EvaluationsWert '!=' EvaluationsWert.
+KleinerVergleich ::= EvaluationsWert '<' EvaluationsWert.
+GroesserVerlgleich ::= EvaluationsWert '>' EvaluationsWert.
+ElseIfVerzweigung ::= 'else if' Vergleich InstruktionsBlock.
+ElseIfVerzweigungen ::= ElseIfVerzweigung
+												| ElseIfVerzweigung ElseIfVerzweigungen.
+ElseVerzweigung ::= 'else' InstruktionsBlock.
+
+WhileVerzweigung ::= 'while' Vergleich InstruktionsBlock.
+ForVerzweigung ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
+
+Zeichen ::= Buchstabe | Ziffer
+Bezeichner ::= Zeichen | (Zeichen Bezeichner).
+AlleZeichen ::= Zeichen | Sonderzeichen.
+Zeichenfolge ::= AlleZeichen | (AlleZeichen Zeichenfolge).
+Sonderzeichen ::= ' ' | '!' | ... | '@'.
+Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.
+Ziffer ::= '0'|...|'9'.
+String ::= ''''
+					 | '""'
+					 | (''' Zeichenfolge ''')
+					 | ('"' Zeichenfolge '"').
+Int ::= Ziffer | Ziffer Int.
+Float ::= Int '.' Int.

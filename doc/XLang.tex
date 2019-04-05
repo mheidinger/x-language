@@ -1,0 +1,98 @@
+\documentclass[a4paper]{article}
+\usepackage{inputenc}[utf8]
+\usepackage{fullpage} % Package to use full page
+\usepackage{parskip} % Package to tweak paragraph skipping
+\usepackage{tikz} % Package for drawing
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{csquotes}
+\usepackage{listings}
+
+\lstset{
+	tabsize=2
+}
+
+\title{XLang}
+\author{Max Heidinger, Pascal Riesinger}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Einleitung}
+
+XLang ist eine Programmiersprache entwickelt im Rahmen der Vorlesung \textit{Compilerbau} an der
+Dualen Hochschule Baden-Württemberg Karlsruhe.
+
+\section{Syntax}
+
+\subsection{Grammatik}
+
+Die folgende Grammatik in der Backus-Naur-Form beschreibt die Syntax von XLang.
+Die Regeln folgen diesen Konventionen:
+
+\begin{itemize}
+	\item Der Aufbau ist \texttt{Symbol ::= Ersetzungen.}, jede Regel wird also mit einem Punkt
+		beendet.
+	\item Terminalsymbole werden zwischen Hochkommata gesetzt, alle anderen Symbole sind
+		Nichtterminale.
+	\item Ausnahmen zu obiger Regel sind das \enquote{Pipe}-Symbol, runde Klammern und der Punkt. Wie vorher
+		beschrieben beendet der Punkt eine Regel. Das Pipe-Symbol bezeichnet alternative Ersetzungen.
+		Runde Klammern werden zur Gruppierung verwendet, um die Lesbarkeit zu verbessern.
+	\item Leerzeichen zwischen Nichtterminalen, sowie Terminalen und Nichtterminalen sind zu
+		ignorieren. Falls Leerzeichen explizit notwending sind, ist dies durch ein Terminal der Form
+		\texttt{' '} gekennzeichnet.
+\end{itemize}
+
+\lstinputlisting{../bnf.txt}
+
+
+\subsection{Beschreibung}
+
+\subsubsection{Struktur}
+
+Ein XLang Programm ist in 3 Teile aufgeteilt.
+Diese werden durch eine Folge von Gleichheitszeichen \texttt{=} voneinander abgetrennt, welche
+mindestens 3 Zeichen lang sein muss.
+Zunächst wird der Name des Programmes vermerkt.
+Anschließend folgt der Variablendeklarationsteil, in welchem alle im Programmteil verwendeten
+Variablen deklariert werden müssen.
+Der dritte Teil des Programmes ist der sogenannte Programmteil, welcher alle Instruktionen
+beinhaltet.
+
+\subsubsection{Variablen}
+
+Es gibt in XLang drei Datentypen:
+
+\begin{itemize}
+	\item Ganzzahlen, deklariert durch den Typ \texttt{int}.
+	\item Gleitkommazahlen, deklariert durch den Typ \texttt{float}.
+	\item Zeichenfolgen, deklariert durch den Typ \texttt{string}.
+\end{itemize}
+
+Wie bereits angemerkt müssen alle im Programm verwendeten Variablen im Variablenteil delariert
+werden.
+Da XLang ohne Funktionen und Unterprogramme auskommt, müssen Variablen, welche als Eingabeparameter
+fungieren sollen mit einem sogenannten \texttt{ImportFlag} gekennzeichnet werden. Eine Deklaration
+einer Eingabevariable sieht dann bespielsweise wie folgt aus: \texttt{-> name string}.
+
+Die Eingabevariablen werden beim Programmstart aus der Kommandozeile ausgelesen.
+Dabei ist die Reihenfolge der Deklaration gleich der Reihenfolge der Übergabe.
+
+Variablen, deren Wert am Ende des Programmes ausgegeben werden soll, müssen mit einem
+\texttt{ExportFlag} gekennzeichnet werden. Eine Deklaration einer Ausgabevariable sieht dann
+beispielsweise wie folgt aus: \texttt{<- ergebnis float}.
+Die Ausgabevariablen werden in der Reihenfolge ausgegeben, in welcher sie deklariert wurden.
+
+Es gibt keine Möglichkeit, Variablen während der Ausführung auszugeben oder einzulesen.
+
+
+
+
+
+
+
+\end{document}
