@@ -63,6 +63,10 @@ Variablen deklariert werden müssen.
 Der dritte Teil des Programmes ist der sogenannte Programmteil, welcher alle Instruktionen
 beinhaltet.
 
+Leerzeichen und Kommentare können überall im Programm eingefügt werden. Zeilenenden werden durch
+ein einzelnes Linefeed-Zeichen (ASCII \texttt{0x0A}) markiert. Diese Zeilenenden werden auch unter
+UNIX-ähnlichen Systemen verwendet.
+
 \subsubsection{Variablen}
 
 Es gibt in XLang drei Datentypen:
@@ -89,10 +93,44 @@ Die Ausgabevariablen werden in der Reihenfolge ausgegeben, in welcher sie deklar
 
 Es gibt keine Möglichkeit, Variablen während der Ausführung auszugeben oder einzulesen.
 
+Variablen können Literale, also konstante Werte oder Ausdrücke zugewiesen werden.
+Ein Ausdruck ist bei numerischen Werten entweder eine andere Variable oder eine mathematische
+Formel. Bei Rechnungen können die Grundrechenarten (Addition, Subtraktion, Multiplikation und
+Division). verwendet werden. Hierbei gilt die gleiche Priorisierung wie im C-Standard.
 
+Bei Zeichenketten ist ein Ausdruck entweder eine andere Variable oder eine Verkettung von mehreren
+Literalen und Variablen über den Additionsoperator.
 
+\subsubsection{Konditionen}
 
+Die Konditionalausdrücke in XLang folgen dem Beispiel anderer Programmiersprachen.
+Wenn der Vergleich nach dem \texttt{if} zu einem logisch \enquote{wahren} Wert evaluiert, werden
+alle Anweisungen im folgenden Anweisungsblock ausgeführt.
+Der \texttt{if}-Anweisung können optional beliebig viele \texttt{else if}-Anweisungen folgen.
+Diese werden nur ausgewertet, wenn der Vergleich der voranstehenden Anweisung zu einem unwahren Wert
+evaluiert wurde.
+Abgeschlossen werden kann ein Konditionalausdruck durch ein \texttt{else}. Die Anweisungen im
+\texttt{else}-Block werden ausgeführt, wenn kein vorheriger Vergleich im Konditionalausdruck zu
+einem wahren Wert evaluiert werden konnte.
 
+\subsubsection{Kommentare}
 
+Es gibt in XLang nur Zeilenkommentare. Diese werden mit doppelten Schrägstrichen eingeleitet und
+können jegliche Zeichen enthalten.
+Kommentare können an jeder Stelle beginnen und enden mit dem Ende der Zeile.
+Kommentare werden vom Compiler ignoriert und haben keine Bedeutung für das Programm.
+
+\subsubsection{Schleifen}
+
+Es gibt in XLang zwei Arten von Schleifen. Eine \texttt{while}-Schleife führt dein Codeblock so
+lange aus, bis die Bedingung im Kopf der Schleife zu einem unwahren Wert evaluiert wird.
+While-Schleifen sind kopfgesteuert.
+
+Die zweite-Art der Schleifen in XLang sind \texttt{for}-Schleifen. Diese erlauben es, eine Zuweisung
+im Fuß der Schleife durchzuführen. Zunächst wird eine Variable zugewiesen, welche dann in der
+Kondition in der Schleife verwendet wird. Der dritte Teil der Schleife weißt der Variable einen
+neuen Wert zu. Vor jedem Durchlauf wird der Vergleich durchgeführt, dann der Programmblock, falls
+der Vergleich zu einem wahren Wert evaluiert, nach dem Ausführen des Programmblockes wird dann die
+Zuweisung ausgeführt.
 
 \end{document}
