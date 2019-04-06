@@ -28,19 +28,21 @@ EvaluationsWert ::= Wert
 										| Addition
 										| Subtraktion
 										| Multiplikation
-										| Division.
+										| Division
+										| RestDivision.
 Wert ::= VariablenName | Literal.
 Literal ::= String | Int | Float.
 Addition ::= EvaluationsWert '+' EvaluationsWert.
 Subtraktion ::= EvaluationsWert '-' EvaluationsWert.
 Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
 Division ::= EvaluationsWert '/' EvaluationsWert.
+RestDivision ::= EvaluationsWert '%' EvaluationsWert.
 
 Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
 InstruktionsBlock ::= '{' InstruktionsListe '}'.
 InstruktionsListe ::= Instruktion | Instruktion InstruktionsListe.
 
-IfVerzweigung ::= ('if' Vergleich InstruktionsBlock)
+IfVerzweigung ::= ('if' ' ' Vergleich InstruktionsBlock)
 									| ('if' ' ' Vergleich InstruktionsBlock ElseVerzweigung)
 									| ('if' ' ' Vergleich InstruktionsBlock ElseIfVerzweigungen)
 									| ('if' ' ' Vergleich InstruktionsBlock

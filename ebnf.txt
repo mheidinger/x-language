@@ -1,7 +1,10 @@
 Startsymbol: Programm
 
-Programm ::= NamenTeil '\n' TeilSeparator '\n' VariablenTeil
-             '\n' TeilSeparator '\n' CodeTeil.
+Programm ::= NamenTeil '\n'
+						 TeilSeparator '\n'
+						 VariablenTeil '\n'
+						 TeilSeparator '\n'
+						 CodeTeil.
 TeilSeparator ::= '===' {'='}.
 
 NamenTeil ::= {Zeichen}.
@@ -19,21 +22,29 @@ Instruktion ::= (Zuweisung '\n') | Verzweigung | (Kommentar '\n).
 Kommentar ::= '//' {Zeichen}.
 
 Zuweisung ::= VariablenName '=' EvaluationsWert.
-EvaluationsWert ::= Wert | Addition | Subtraktion | Multiplikation | Division.
-Wert ::= VariablenName | Konstante.
-Konstante ::= String | Int | Float.
+EvaluationsWert ::= Wert
+										| Addition
+										| Subtraktion
+										| Multiplikation
+										| Division
+										| RestDivision.
+Wert ::= VariablenName | Literal.
+Literal ::= String | Int | Float.
 Addition ::= EvaluationsWert '+' EvaluationsWert.
 Subtraktion ::= EvaluationsWert '-' EvaluationsWert.
 Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
 Division ::= EvaluationsWert '/' EvaluationsWert.
+RestDivision ::= EvaluationsWert '%' EvaluationsWert.
 
 Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
 InstruktionsBlock ::= '{' {Instruktion} '}'.
 
 IfVerzweigung ::= 'if' Vergleich InstruktionsBlock
                   {ElseIfVerzweigung} [ElseVerzweigung].
-Vergleich ::= GleichheitsVergleich | UngleichheitsVergleich |
-              KleinerVergleich | GroesserVergleich.
+Vergleich ::= GleichheitsVergleich
+							| UngleichheitsVergleich
+							| KleinerVergleich
+							| GroesserVergleich.
 GleichheitsVergleich ::= EvaluationsWert '==' EvaluationsWert.
 UngleichheitsVergleich ::= EvaluationsWert '!=' EvaluationsWert.
 KleinerVergleich ::= EvaluationsWert '<' EvaluationsWert.
@@ -46,7 +57,12 @@ ForVerzweigung ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock
 
 Zeichen := Buchstabe | Ziffer
 Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.
+AlleZeichen ::= Zeichen | Sonderzeichen.
+Sonderzeichen ::= ' ' | '!' | ... | '@'.
 Ziffer ::= '0'|...|'9'.
-String ::= ('''|'"') {Zeichen} ('''|'"').
+String ::= ''''
+					 | '""'
+					 | ''' {AlleZeichen} '''
+					 | '"' {AlleZeichen} '"'.
 Int ::= Ziffer {Ziffer}.
-Float ::= Ziffer {Ziffer} '.' Ziffer {Ziffer}.
+Float ::= Int '.' Int.
