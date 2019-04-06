@@ -1,3 +1,5 @@
+Startsymbol: Programm
+
 Programm ::= NamenTeil '\n' TeilSeparator '\n' VariablenTeil '\n' TeilSeparator '\n' CodeTeil.
 TeilSeparator ::= '===' {'='}.
 
