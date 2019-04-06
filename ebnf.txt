@@ -1,6 +1,7 @@
 Startsymbol: Programm
 
-Programm ::= NamenTeil '\n' TeilSeparator '\n' VariablenTeil '\n' TeilSeparator '\n' CodeTeil.
+Programm ::= NamenTeil '\n' TeilSeparator '\n' VariablenTeil
+             '\n' TeilSeparator '\n' CodeTeil.
 TeilSeparator ::= '===' {'='}.
 
 NamenTeil ::= {Zeichen}.
@@ -29,12 +30,14 @@ Division ::= EvaluationsWert '/' EvaluationsWert.
 Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
 InstruktionsBlock ::= '{' {Instruktion} '}'.
 
-IfVerzweigung ::= 'if' Vergleich InstruktionsBlock {ElseIfVerzweigung} [ElseVerzweigung].
-Vergleich ::= GleichheitsVergleich | UngleichheitsVergleich | KleinerVergleich | GrößerVerlgleich.
+IfVerzweigung ::= 'if' Vergleich InstruktionsBlock
+                  {ElseIfVerzweigung} [ElseVerzweigung].
+Vergleich ::= GleichheitsVergleich | UngleichheitsVergleich |
+              KleinerVergleich | GroesserVergleich.
 GleichheitsVergleich ::= EvaluationsWert '==' EvaluationsWert.
 UngleichheitsVergleich ::= EvaluationsWert '!=' EvaluationsWert.
 KleinerVergleich ::= EvaluationsWert '<' EvaluationsWert.
-GrößerVerlgleich ::= EvaluationsWert '>' EvaluationsWert.
+GroesserVergleich ::= EvaluationsWert '>' EvaluationsWert.
 ElseIfVerzweigung ::= 'else if' Vergleich InstruktionsBlock.
 ElseVerzweigung ::= 'else' InstruktionsBlock.
 
