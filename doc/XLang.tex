@@ -10,7 +10,14 @@
 \usepackage{listings}
 
 \lstset{
-	tabsize=2
+    language=Matlab,
+    basicstyle=\footnotesize,
+    numbers=left,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=2,
+    breaklines=true,
+    breakatwhitespace=false,
 }
 
 \title{XLang}
@@ -31,23 +38,10 @@ Dualen Hochschule Baden-Württemberg Karlsruhe.
 
 \subsection{Grammatik}
 
-Die folgende Grammatik in der Backus-Naur-Form beschreibt die Syntax von XLang.
-Die Regeln folgen diesen Konventionen:
+Die folgende Grammatik in der Extended-Backus-Naur-Form beschreibt die Syntax von XLang.
+Wiederholungen, die in geschweiften Klammern (\texttt{\{ \}}) gekennzeichnet sind, schließen null Wiederholungen (das leere Wort) mit ein.
 
-\begin{itemize}
-	\item Der Aufbau ist \texttt{Symbol ::= Ersetzungen.}, jede Regel wird also mit einem Punkt
-		beendet.
-	\item Terminalsymbole werden zwischen Hochkommata gesetzt, alle anderen Symbole sind
-		Nichtterminale.
-	\item Ausnahmen zu obiger Regel sind das \enquote{Pipe}-Symbol, runde Klammern und der Punkt. Wie vorher
-		beschrieben beendet der Punkt eine Regel. Das Pipe-Symbol bezeichnet alternative Ersetzungen.
-		Runde Klammern werden zur Gruppierung verwendet, um die Lesbarkeit zu verbessern.
-	\item Leerzeichen zwischen Nichtterminalen, sowie Terminalen und Nichtterminalen sind zu
-		ignorieren. Falls Leerzeichen explizit notwending sind, ist dies durch ein Terminal der Form
-		\texttt{' '} gekennzeichnet.
-\end{itemize}
-
-\lstinputlisting{../bnf.txt}
+\lstinputlisting{../ebnf.txt}
 
 
 \subsection{Beschreibung}
@@ -55,7 +49,7 @@ Die Regeln folgen diesen Konventionen:
 \subsubsection{Struktur}
 
 Ein XLang Programm ist in 3 Teile aufgeteilt.
-Diese werden durch eine Folge von Gleichheitszeichen \texttt{=} voneinander abgetrennt, welche
+Diese werden durch eine Folge von Gleichheitszeichen (\texttt{=}) voneinander abgetrennt, welche
 mindestens 3 Zeichen lang sein muss.
 Zunächst wird der Name des Programmes vermerkt.
 Anschließend folgt der Variablendeklarationsteil, in welchem alle im Programmteil verwendeten
@@ -63,9 +57,11 @@ Variablen deklariert werden müssen.
 Der dritte Teil des Programmes ist der sogenannte Programmteil, welcher alle Instruktionen
 beinhaltet.
 
-Leerzeichen und Kommentare können überall im Programm eingefügt werden. Zeilenenden werden durch
+Leerzeichen können überall im Programm eingefügt werden. Zeilenenden werden durch
 ein einzelnes Linefeed-Zeichen (ASCII \texttt{0x0A}) markiert. Diese Zeilenenden werden auch unter
 UNIX-ähnlichen Systemen verwendet.
+
+Kommentare können im Codeteil nur in eigenen Zeilen mit \texttt{//} markiert verwendet werden.
 
 \subsubsection{Variablen}
 
@@ -80,13 +76,13 @@ Es gibt in XLang drei Datentypen:
 Wie bereits angemerkt müssen alle im Programm verwendeten Variablen im Variablenteil delariert
 werden.
 Da XLang ohne Funktionen und Unterprogramme auskommt, müssen Variablen, welche als Eingabeparameter
-fungieren sollen mit einem sogenannten \texttt{ImportFlag} gekennzeichnet werden. Eine Deklaration
+fungieren sollen, mit einer sogenannten \texttt{ImportFlag} gekennzeichnet werden. Eine Deklaration
 einer Eingabevariable sieht dann bespielsweise wie folgt aus: \texttt{-> name string}.
 
 Die Eingabevariablen werden beim Programmstart aus der Kommandozeile ausgelesen.
 Dabei ist die Reihenfolge der Deklaration gleich der Reihenfolge der Übergabe.
 
-Variablen, deren Wert am Ende des Programmes ausgegeben werden soll, müssen mit einem
+Variablen, deren Wert am Ende des Programmes ausgegeben werden soll, müssen mit einer
 \texttt{ExportFlag} gekennzeichnet werden. Eine Deklaration einer Ausgabevariable sieht dann
 beispielsweise wie folgt aus: \texttt{<- ergebnis float}.
 Die Ausgabevariablen werden in der Reihenfolge ausgegeben, in welcher sie deklariert wurden.
@@ -96,7 +92,7 @@ Es gibt keine Möglichkeit, Variablen während der Ausführung auszugeben oder e
 Variablen können Literale, also konstante Werte oder Ausdrücke zugewiesen werden.
 Ein Ausdruck ist bei numerischen Werten entweder eine andere Variable oder eine mathematische
 Formel. Bei Rechnungen können die Grundrechenarten (Addition, Subtraktion, Multiplikation und
-Division). verwendet werden. Hierbei gilt die gleiche Priorisierung wie im C-Standard.
+Division). verwendet werden. Hierbei gilt die gleiche Priorisierung, wie im C-Standard.
 
 Bei Zeichenketten ist ein Ausdruck entweder eine andere Variable oder eine Verkettung von mehreren
 Literalen und Variablen über den Additionsoperator.
@@ -117,7 +113,7 @@ einem wahren Wert evaluiert werden konnte.
 
 Es gibt in XLang nur Zeilenkommentare. Diese werden mit doppelten Schrägstrichen eingeleitet und
 können jegliche Zeichen enthalten.
-Kommentare können an jeder Stelle beginnen und enden mit dem Ende der Zeile.
+Kommentare können im Codeteil vorkommen und enden mit dem Ende der Zeile.
 Kommentare werden vom Compiler ignoriert und haben keine Bedeutung für das Programm.
 
 \subsubsection{Schleifen}
@@ -132,5 +128,28 @@ Kondition in der Schleife verwendet wird. Der dritte Teil der Schleife weißt de
 neuen Wert zu. Vor jedem Durchlauf wird der Vergleich durchgeführt, dann der Programmblock, falls
 der Vergleich zu einem wahren Wert evaluiert, nach dem Ausführen des Programmblockes wird dann die
 Zuweisung ausgeführt.
+
+
+\section{Verwendetes Allgemeinwissen}
+
+In XLang wird verschiedenes Allgemeinwissen verwendet.
+Ein Beispiel ist, dass eine deklarierte Variable im Code verwendet werden kann.
+Auch das Verhalten der Kontrollstrukturen folgt den \enquote{Regeln} des Allgemeinwissen.
+Bei numerischen Berechnungen werden die allgemein bekannten Rechenregeln angewandt.
+
+
+\section{Beispielprogramme}
+
+\subsection{Berechnung der Fakultät}
+
+\lstinputlisting{../factorial.x}
+
+\subsection{Berechnung des größten gemeinsamen Teilers}
+
+\lstinputlisting{../ggt.x}
+
+\section{BNF}
+
+\lstinputlisting{../bnf.txt}
 
 \end{document}
