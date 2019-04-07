@@ -39,6 +39,7 @@ Dualen Hochschule Baden-Württemberg Karlsruhe.
 \subsection{Grammatik}
 
 Die folgende Grammatik in der Extended-Backus-Naur-Form beschreibt die Syntax von XLang.
+Wiederholungen, die in geschweiften Klammern (\texttt{\{ \}}) gekennzeichnet sind, schließen null Wiederholungen (das leere Wort) mit ein.
 
 \lstinputlisting{../ebnf.txt}
 
@@ -127,6 +128,14 @@ Kondition in der Schleife verwendet wird. Der dritte Teil der Schleife weißt de
 neuen Wert zu. Vor jedem Durchlauf wird der Vergleich durchgeführt, dann der Programmblock, falls
 der Vergleich zu einem wahren Wert evaluiert, nach dem Ausführen des Programmblockes wird dann die
 Zuweisung ausgeführt.
+
+
+\section{Verwendetes Allgemeinwissen}
+
+In XLang wird verschiedenes Allgemeinwissen verwendet.
+Ein Beispiel ist, dass eine deklarierte Variable im Code verwendet werden kann.
+Auch das Verhalten der Kontrollstrukturen folgt den \enquote{Regeln} des Allgemeinwissen.
+Bei numerischen Berechnungen werden die allgemein bekannten Rechenregeln angewandt.
 
 
 \section{Beispielprogramme}
