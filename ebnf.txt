@@ -1,15 +1,15 @@
 Startsymbol: Programm
 
-Programm ::= NamenTeil '\n'
-						 TeilSeparator '\n'
-						 VariablenTeil '\n'
-						 TeilSeparator '\n'
+Programm ::= NamenTeil
+						 TeilSeparator
+						 VariablenTeil
+						 TeilSeparator
 						 CodeTeil.
 TeilSeparator ::= '===' {'='}.
 
-NamenTeil ::= {Zeichen}.
+NamenTeil ::= Zeichen {Zeichen}.
 
-VariablenTeil ::= {Variable '\n'}.
+VariablenTeil ::= {Variable ';'}.
 Variable ::= [ImportExportFlag] VariablenName VariablenTyp.
 ImportExportFlag ::= ImportFlag | ExportFlag.
 ImportFlag ::= '->'.
@@ -18,8 +18,8 @@ VariablenName ::= Buchstabe {Zeichen}.
 VariablenTyp ::= 'int' | 'float' | 'string'.
 
 CodeTeil ::= {Instruktion}.
-Instruktion ::= (Zuweisung '\n') | Verzweigung | (Kommentar '\n).
-Kommentar ::= '//' {Zeichen}.
+Instruktion ::= (Zuweisung ';') | Verzweigung | Schleife | Kommentar.
+Kommentar ::= '//' {AlleZeichen}.
 
 Zuweisung ::= VariablenName '=' EvaluationsWert.
 EvaluationsWert ::= Wert
@@ -27,7 +27,8 @@ EvaluationsWert ::= Wert
 										| Subtraktion
 										| Multiplikation
 										| Division
-										| RestDivision.
+										| RestDivision
+										| '(' EvaluationsWert ')'.
 Wert ::= VariablenName | Literal.
 Literal ::= String | Int | Float.
 Addition ::= EvaluationsWert '+' EvaluationsWert.
@@ -36,7 +37,8 @@ Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
 Division ::= EvaluationsWert '/' EvaluationsWert.
 RestDivision ::= EvaluationsWert '%' EvaluationsWert.
 
-Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
+Verzweigung ::= IfVerzweigung.
+Schleife ::= WhileSchleife | ForSchleife.
 InstruktionsBlock ::= '{' {Instruktion} '}'.
 
 IfVerzweigung ::= 'if' Vergleich InstruktionsBlock
@@ -52,8 +54,8 @@ GroesserVergleich ::= EvaluationsWert '>' EvaluationsWert.
 ElseIfVerzweigung ::= 'else if' Vergleich InstruktionsBlock.
 ElseVerzweigung ::= 'else' InstruktionsBlock.
 
-WhileVerzweigung ::= 'while' Vergleich InstruktionsBlock.
-ForVerzweigung ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
+WhileSchleife ::= 'while' Vergleich InstruktionsBlock.
+ForSchleife ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
 
 Zeichen := Buchstabe | Ziffer
 Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.

@@ -1,18 +1,18 @@
 Startsymbol: Programm
 
-Programm ::= NamenTeil '\n'
-						 TeilSeparator '\n'
-						 VariablenTeil '\n'
-						 TeilSeparator '\n'
+Programm ::= NamenTeil
+						 TeilSeparator
+						 VariablenTeil
+						 TeilSeparator
 						 CodeTeil.
 TeilSeparator ::= '==' TeilSeparatorZeichen.
 TeilSeparatorZeichen ::= '=' | ('=' TeilSeparatorZeichen).
 
 NamenTeil ::= Zeichen | (Zeichen NamenTeil).
 
-VariablenTeil ::= Variable | (Variable '\n' VariablenTeil).
-Variable ::= (ImportExportFlag ' ' VariablenName ' ' VariablenTyp)
-						 | (VariablenName ' ' VariablenTyp).
+VariablenTeil ::= Variable | (Variable VariablenTeil).
+Variable ::= (ImportExportFlag VariablenName VariablenTyp ';')
+						 | (VariablenName VariablenTyp ';').
 ImportExportFlag ::= ImportFlag | ExportFlag.
 ImportFlag ::= '->'.
 ExportFlag ::= '<-'.
@@ -20,7 +20,7 @@ VariablenName ::= Buchstabe | Buchstabe Bezeichner.
 VariablenTyp ::= 'int' | 'float' | 'string'.
 
 CodeTeil ::= Instruktion | Instruktion CodeTeil.
-Instruktion ::= (Zuweisung '\n') | Verzweigung | (Kommentar '\n').
+Instruktion ::= (Zuweisung ';') | Verzweigung | Schleife | Kommentar.
 Kommentar ::= '//' | '//' Zeichenfolge.
 
 Zuweisung ::= VariablenName '=' EvaluationsWert.
@@ -29,7 +29,8 @@ EvaluationsWert ::= Wert
 										| Subtraktion
 										| Multiplikation
 										| Division
-										| RestDivision.
+										| RestDivision
+										| '(' EvaluationsWert ')'.
 Wert ::= VariablenName | Literal.
 Literal ::= String | Int | Float.
 Addition ::= EvaluationsWert '+' EvaluationsWert.
@@ -38,14 +39,15 @@ Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
 Division ::= EvaluationsWert '/' EvaluationsWert.
 RestDivision ::= EvaluationsWert '%' EvaluationsWert.
 
-Verzweigung ::= IfVerzweigung | WhileVerzweigung | ForVerzweigung.
+Verzweigung ::= IfVerzweigung.
+Schleife ::= WhileVerzweigung | ForVerzweigung.
 InstruktionsBlock ::= '{' InstruktionsListe '}'.
 InstruktionsListe ::= Instruktion | Instruktion InstruktionsListe.
 
-IfVerzweigung ::= ('if' ' ' Vergleich InstruktionsBlock)
-									| ('if' ' ' Vergleich InstruktionsBlock ElseVerzweigung)
-									| ('if' ' ' Vergleich InstruktionsBlock ElseIfVerzweigungen)
-									| ('if' ' ' Vergleich InstruktionsBlock
+IfVerzweigung ::= ('if' Vergleich InstruktionsBlock)
+									| ('if' Vergleich InstruktionsBlock ElseVerzweigung)
+									| ('if' Vergleich InstruktionsBlock ElseIfVerzweigungen)
+									| ('if' Vergleich InstruktionsBlock
 											ElseIfVerzweigungen ElseVerzweigung).
 Vergleich ::= GleichheitsVergleich
 							| UngleichheitsVergleich
