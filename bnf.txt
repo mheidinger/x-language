@@ -40,7 +40,7 @@ Division ::= EvaluationsWert '/' EvaluationsWert.
 RestDivision ::= EvaluationsWert '%' EvaluationsWert.
 
 Verzweigung ::= IfVerzweigung.
-Schleife ::= WhileVerzweigung | ForVerzweigung.
+Schleife ::= WhileSchleife | ForSchleife.
 InstruktionsBlock ::= '{' InstruktionsListe '}'.
 InstruktionsListe ::= Instruktion | Instruktion InstruktionsListe.
 
@@ -62,8 +62,8 @@ ElseIfVerzweigungen ::= ElseIfVerzweigung
 												| ElseIfVerzweigung ElseIfVerzweigungen.
 ElseVerzweigung ::= 'else' InstruktionsBlock.
 
-WhileVerzweigung ::= 'while' Vergleich InstruktionsBlock.
-ForVerzweigung ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
+WhileSchleife ::= 'while' Vergleich InstruktionsBlock.
+ForSchleife ::= 'for' Zuweisung ';' Vergleich ';' Zuweisung InstruktionsBlock.
 
 Zeichen ::= Buchstabe | Ziffer
 Bezeichner ::= Zeichen | (Zeichen Bezeichner).
