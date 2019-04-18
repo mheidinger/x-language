@@ -110,9 +110,11 @@ einem wahren Wert evaluiert werden konnte.
 
 \subsubsection{Kommentare}
 
-Es gibt in XLang nur Zeilenkommentare. Diese werden mit doppelten Schrägstrichen eingeleitet und
-können jegliche Zeichen enthalten.
-Kommentare können im Codeteil vorkommen und enden mit dem Ende der Zeile.
+Es gibt in XLang zwei Kommentarformen, welche an jeder Stelle im Quelltext eingefügt werden können.
+Zeilenkommentare erstrecken sich vom Kommentaranfang (\texttt{//}) bis zum nächsten Zeilenende.
+Mehrzeilige Kommentare erstrecken sich vom Kommentaranfang (\texttt{/*}) bis zum nächsten
+Komenntarende (\texttt{*/}).
+Beide Kommentartypen können jegliche Zeichen beinhalten.
 Kommentare werden vom Compiler ignoriert und haben keine Bedeutung für das Programm.
 
 \subsubsection{Schleifen}
