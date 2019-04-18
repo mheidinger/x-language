@@ -5,3 +5,12 @@ else
 "Hello World!"
 thisIsThe1stIdentifier
 x
+if 
+// Line comments!
+else if 
+else
+for // Comments everywhere!
+while 
+10 + 13
+13+42
+/* This is a comment */

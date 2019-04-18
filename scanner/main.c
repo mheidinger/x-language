@@ -1,8 +1,7 @@
-/* Project:  COCKTAIL training
+/* Project:  XLang
  * Descr:    A simple scanner generated with rex
- * Kind:     C-main function, fully implemented solution
- * Author:   Dr. Juergen Vollmer <juergen.vollmer@informatik-vollmer.d
- * $Id: main.c.in,v 1.6 2018/04/25 14:58:12 vollmer Exp $
+ * Kind:     C-main function
+ * Author:   Max Heidinger <mail@max-heidinger.de>, Pascal Riesinger <mail@pascal-riesinger.de>
  */
 
 # include <stdio.h>
@@ -52,7 +51,19 @@ int main (int argc, char *argv[])
       case tok_keyword_else:
 	printf("keyword_else\n");
 	break;
-      default: fprintf (stderr, "FATAL ERROR, unknown token\n");
+      case tok_keyword_elseif:
+	printf("keyword_elseif\n");
+	break;
+      case tok_keyword_while:
+	printf("keyword_while\n");
+	break;
+      case tok_keyword_for:
+	printf("keyword_for\n");
+	break;
+      case tok_op_add:
+	printf("op_add\n");
+	break;
+      default: fprintf(stderr, "FATAL ERROR, unknown token\n");
       }
    }
    printf ("Token count: %d\n", Count);

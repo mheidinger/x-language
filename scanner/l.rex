@@ -1,6 +1,6 @@
-/* Project:  COCKTAIL training
+/* Project:  XLang
  * Descr:    a simple scanner generated with rex
- * Kind:     REX scanner specification (solution)
+ * Kind:     REX scanner specification
  * Author:   Max Heidinger <mail@max-heidinger.de>, Pascal Riesinger <mail@pascal-riesinger.de>
  */
 
@@ -40,12 +40,16 @@ typedef union {
 /* Tokens are coded as int's, with values >=0
  * The value 0 is reserved for the EofToken, which is defined automatically
  */
-# define tok_int_const    1
-# define tok_float_const  2
-# define tok_string_const 3
-# define tok_ident        4
-# define tok_keyword_if   5
-# define tok_keyword_else 6
+# define tok_int_const       1
+# define tok_float_const     2
+# define tok_string_const    3
+# define tok_ident           4
+# define tok_keyword_if      5
+# define tok_keyword_else    6
+# define tok_keyword_elseif  7
+# define tok_keyword_for     8
+# define tok_keyword_while   9
+# define tok_op_add          10
 } // EXPORT
 
 GLOBAL {
@@ -67,14 +71,18 @@ DEFAULT {
 
 EOF {
   /* What should be done if the end-of-input-file has been reached? */
-
-  /* E.g.: check hat strings and comments are closed. */
   switch (yyStartState) {
   case STD:
     /* ok */
     break;
+  case STRING:
+    Message("String literal not closed before EOF", xxError, l_scan_Attribute.Position);
+    break;
+  case COMMENT: 
+    Message("Comment not closed before EOF", xxError, l_scan_Attribute.Position);
+    break;
   default:
-    Message ("OOPS: that should not happen!!", xxFatal, l_scan_Attribute.Position);
+    Message("OOPS: that should not happen!!", xxFatal, l_scan_Attribute.Position);
     break;
   }
 
@@ -87,7 +95,7 @@ DEFINE  /* some abbreviations */
   character = (digit | letter).
 
 /* define start states, note STD is defined by default, separate several states by a comma */
-START STRING
+START STRING, COMMENT
 
 RULE
 
@@ -149,11 +157,37 @@ RULE
   return tok_keyword_else;
 }
 
+#STD# "else if" : {
+  return tok_keyword_elseif;
+}
+
+#STD# "while" : {
+  return tok_keyword_while;
+}
+
+#STD# "for" : {
+  return tok_keyword_for;
+}
+
 /* Line comments */
 #STD# "//" ANY* :- {}
 
-/* TODO: C-style comment */
+/* C-style comment */
+#STD# "/*" :- {
+  yyStart(COMMENT);
+}
 
+#COMMENT# "*/" :- {
+  yyStart(STD);
+}
+
+#COMMENT# "/" | "*" | -{*/\n\t}+ :- {}
+
+/* Operators */
+
+#STD# "+" : {
+  return tok_op_add;
+}
 
 /* Identifier */
 

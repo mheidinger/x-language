@@ -304,3 +304,4 @@ tags
 [._]*.un~
 
 # End of https://www.gitignore.io/api/latex,vim,linux
+**/*.o

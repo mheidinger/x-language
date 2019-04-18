@@ -44,14 +44,18 @@ typedef union {
 /* Tokens are coded as int's, with values >=0
  * The value 0 is reserved for the EofToken, which is defined automatically
  */
-# define tok_int_const    1
-# define tok_float_const  2
-# define tok_string_const 3
-# define tok_ident        4
-# define tok_keyword_if   5
-# define tok_keyword_else 6
+# define tok_int_const       1
+# define tok_float_const     2
+# define tok_string_const    3
+# define tok_ident           4
+# define tok_keyword_if      5
+# define tok_keyword_else    6
+# define tok_keyword_elseif  7
+# define tok_keyword_for     8
+# define tok_keyword_while   9
+# define tok_op_add          10
 
-/* line 54 "l_scan.h" */
+/* line 58 "l_scan.h" */
 
 # define l_scan_EofToken	0
 # define l_scan_xxMaxCharacter	255
