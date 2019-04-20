@@ -4,7 +4,6 @@ if
 else
 "Hello World!"
 thisIsThe1stIdentifier
-x
 if 
 // Line comments!
 else if 
@@ -14,3 +13,5 @@ while
 10 + 13
 13+42
 /* This is a comment */
+x andIdent /*+ 123 */ + 12523.34241
+"Will this /* work */?"
