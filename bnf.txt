@@ -72,9 +72,7 @@ Zeichenfolge ::= AlleZeichen | (AlleZeichen Zeichenfolge).
 Sonderzeichen ::= ' ' | '!' | ... | '@'.
 Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.
 Ziffer ::= '0'|...|'9'.
-String ::= ''''
-					 | '""'
-					 | (''' Zeichenfolge ''')
+String ::= '""'
 					 | ('"' Zeichenfolge '"').
 Int ::= Ziffer | Ziffer Int.
 Float ::= Int '.' Int.

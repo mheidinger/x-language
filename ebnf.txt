@@ -62,9 +62,6 @@ Buchstabe ::= 'A'|...|'Z'|'a'|...|'z'.
 AlleZeichen ::= Zeichen | Sonderzeichen.
 Sonderzeichen ::= ' ' | '!' | ... | '@'.
 Ziffer ::= '0'|...|'9'.
-String ::= ''''
-					 | '""'
-					 | ''' {AlleZeichen} '''
-					 | '"' {AlleZeichen} '"'.
+String ::= '"' {AlleZeichen} '"'.
 Int ::= Ziffer {Ziffer}.
 Float ::= Int '.' Int.
