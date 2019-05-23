@@ -28,7 +28,10 @@ EvaluationsWert ::= Wert
 										| Multiplikation
 										| Division
 										| RestDivision
-										| '(' EvaluationsWert ')'.
+										| Exponent
+										| '(' EvaluationsWert ')'
+										| '-' EvaluationsWert
+										| '+' EvaluationsWert.
 Wert ::= VariablenName | Literal.
 Literal ::= String | Int | Float.
 Addition ::= EvaluationsWert '+' EvaluationsWert.
@@ -36,6 +39,7 @@ Subtraktion ::= EvaluationsWert '-' EvaluationsWert.
 Multiplikation ::= EvaluationsWert '*' EvaluationsWert.
 Division ::= EvaluationsWert '/' EvaluationsWert.
 RestDivision ::= EvaluationsWert '%' EvaluationsWert.
+Exponent ::= EvaluationsWert '^' EvaluationsWert.
 
 Verzweigung ::= IfVerzweigung.
 Schleife ::= WhileSchleife | ForSchleife.
@@ -46,11 +50,15 @@ IfVerzweigung ::= 'if' Vergleich InstruktionsBlock
 Vergleich ::= GleichheitsVergleich
 							| UngleichheitsVergleich
 							| KleinerVergleich
-							| GroesserVergleich.
+							| GroesserVergleich
+							| KleinerGleichVergleich
+							| GroesserGleichVergleich.
 GleichheitsVergleich ::= EvaluationsWert '==' EvaluationsWert.
 UngleichheitsVergleich ::= EvaluationsWert '!=' EvaluationsWert.
 KleinerVergleich ::= EvaluationsWert '<' EvaluationsWert.
 GroesserVergleich ::= EvaluationsWert '>' EvaluationsWert.
+KleinerGleichVergleich ::= EvaluationsWert '<=' EvaluationsWert.
+GroesserGleichVergleich ::= EvaluationsWert '>=' EvaluationsWert.
 ElseIfVerzweigung ::= 'else if' Vergleich InstruktionsBlock.
 ElseVerzweigung ::= 'else' InstruktionsBlock.
 
