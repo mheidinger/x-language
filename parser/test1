@@ -1,0 +1,20 @@
+TestProgramm
+===
+// Input indicated with incoming arrow
+-> input_num int;
+-> input_string string;
+// Output indicated with outgoing arrow
+<- result int;
+some_string   string;
+random_float  float;
+===
+result = input_num * 3;
+if result != 10 {
+	result = input_num / (input_num + 3);
+}
+while some_string == "hallo" {
+	result = -result;
+}
+for x = 3; x < 10; x = x+1 {
+	result = result ^ x;
+}

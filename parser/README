@@ -1,0 +1,19 @@
+###############################################################################
+# Project:  XLang
+# Descr:    A compiler for the X language
+# Author:   Max Heidinger <mail@max-heidinger.de>, 
+            Pascal Riesinger <mail@pascal-riesinger.de>
+###############################################################################
+
+This directory descripts the implementation of a parser and scanner for the
+X toy language.
+
+The files:
+	xlang.pars	The parser specification
+	xlang.scan	The scanner specification
+	main.c          C main program
+	test*           Some test sources
+	xlang		the executable to be produced
+	Makefile
+	README
+
