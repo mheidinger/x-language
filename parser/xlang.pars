@@ -113,11 +113,12 @@ ForLoop = 'for' Assignment ';' Comparison ';' Assignment CodeBlock.
 
 
 /* Tokens */
-int_const:    [Value: long]   {Value := 0;  }.
-float_const:  [Value: double] {Value := 0.0;}.
+int_const:    [Value: long       ] {Value := 0;  }.
+float_const:  [Value: double     ] {Value := 0.0;}.
 string_const: [Value: tStringRef ] {Value := NoString; }.
 prog_name:    [Value: tStringRef ] {Value := NoString; }.
 identifier:   [Value: tIdent     ] {Value := NoIdent; }.
+separator:    [dummy: int        ] {Value := 0; }.
 
 
 /* non-terminal attributes */
