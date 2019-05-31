@@ -44,12 +44,9 @@ IOFlag = <
 >.
 
 VariablenTyp = <
-  = int
-    { Value := { Value = PutString1("int"); }; }.
-  = float
-    { Value := { Value = PutString1("float"); }; }.
-  = string
-    { Value := { Value = PutString1("string"); }; }.
+  = 'int'.
+  = 'float'.
+  = 'string'.
 >.
 
 CodeTeil = <
@@ -113,19 +110,12 @@ ForLoop = 'for' Assignment ';' Comparison ';' Assignment CodeBlock.
 
 
 /* Tokens */
-int_const:    [Value: long       ] {Value := 0;  }.
-float_const:  [Value: double     ] {Value := 0.0;}.
-string_const: [Value: tStringRef ] {Value := NoString; }.
-prog_name:    [Value: tStringRef ] {Value := NoString; }.
-identifier:   [Value: tIdent     ] {Value := NoIdent; }.
-separator:    [dummy: int        ] {Value := 0; }.
+int_const:    [Value: long       ] { Value := 0; }.
+float_const:  [Value: double     ] { Value := 0.0; }.
+string_const: [Value: tStringRef ] { Value := NoString; }.
+prog_name:    [Value: tStringRef ] { Value := NoString; }.
+identifier:   [Value: tIdent     ] { Value := NoIdent; }.
+separator:    [Dummy: int        ] { Dummy := 0; }.
 
-
-/* non-terminal attributes */
-MODULE attributes
-PROPERTY SYN
-DECLARE
- VariablenTyp = [Value: tStringRef] .
-END attributes
 
 /* vim: set sw=2 ts=2 expandtab: */
