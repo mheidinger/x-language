@@ -11,7 +11,7 @@ random_float  float;
 result = input_num * 3;
 if result != 10 {
 	result = input_num / (input_num + 3);
-} else if {
+} else if result > 10 {
 	result = result * 5;
 } else {
 	results = result / 2;

@@ -46,14 +46,12 @@ int main (int argc, char *argv[])
    }
 
    /* ASCII output of the tree: */
-   WriteTree (stdout, TreeRoot);
+   /* WriteTree (stdout, TreeRoot); */
 
    /* set some parameters for the Tree Browser */
-   /*
    SetDepthTree (20);
    SetBoxTree   (100, 20);
    DrawTree     (TreeRoot);
-   */
 
    return (errors == 0)? 0 : 1;
 }

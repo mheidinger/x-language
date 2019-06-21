@@ -29,6 +29,9 @@ include ../config.mk
 # Create your parser
 all: $(MAIN)
 
+tar: clean
+	cd .. && tar -czvf Heidinger-Riesinger.tar.gz Heidinger-Riesinger
+
 # Run the test suite
 test:
 	./$(MAIN) test1
