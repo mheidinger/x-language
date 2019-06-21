@@ -1,0 +1,121 @@
+/* Project:  XLang
+ * Descr:    Parser for XLang
+ * Author:   Max Heidinger <mail@max-heidinger.de>, Pascal Riesinger <mail@pascal-riesinger.de>
+ */
+
+SCANNER xlang_scan
+
+PARSER  xlang_pars
+
+GLOBAL {
+  # include <stdio.h>
+  # include <math.h>
+  # include "StringM.h"
+  # define M_PI acos(-1.0) 
+}
+
+PREC NONE  '<' '>' '==' '!='
+     LEFT  '+' '-'
+     LEFT  '*' '/' '%'
+     LEFT  UNARY
+     RIGHT '^'
+
+RULE
+root 	= Programm.
+
+Programm = NamenTeil separator VariablenTeil separator CodeTeil.
+
+NamenTeil = prog_name.
+VariablenTeil = DeclarationList.
+
+DeclarationList = <
+   = Variable ';'.
+   = DeclarationList Variable ';'.
+>.
+
+Variable = <
+  = IOFlag identifier VariablenTyp.
+>.
+
+IOFlag = <
+  ImportFlag = '->'.
+  ExportFlag = '<-'.
+  = .
+>.
+
+VariablenTyp = <
+  = 'int'.
+  = 'float'.
+  = 'string'.
+>.
+
+CodeTeil = <
+  = Instruction.
+  = CodeTeil Instruction.
+>.
+
+Instruction = <
+  = Assignment ';'.
+  = Condition.
+  = Loop.
+>.
+
+Assignment = identifier '=' Expression.
+Expression = <
+  = int_const.
+  = float_const.
+  = string_const.
+  = identifier.
+  = Expression '+' Expression.
+  = Expression '-' Expression.
+  = Expression '*' Expression.
+  = Expression '/' Expression.
+  = Expression '%' Expression.
+  = Expression '^' Expression.
+  = '(' Expression ')'.
+  = '+' Expression PREC UNARY.
+  = '-' Expression PREC UNARY.
+>.
+
+CodeBlock = '{' CodeTeil '}'.
+
+Condition = <
+  = 'if' Comparison CodeBlock.
+  = 'if' Comparison CodeBlock else CodeBlock.
+  = 'if' Comparison CodeBlock ElseIfList CodeBlock.
+  = 'if' Comparison CodeBlock ElseIfList CodeBlock else CodeBlock.
+>.
+
+ElseIfList = <
+  = 'else if' CodeBlock.
+  = ElseIfList 'else if' CodeBlock.
+>.
+
+Comparison = <
+  = Expression '<' Expression. 
+  = Expression '>' Expression. 
+  = Expression '<=' Expression. 
+  = Expression '>=' Expression. 
+  = Expression '==' Expression. 
+  = Expression '!=' Expression. 
+>.
+
+Loop = <
+  = WhileLoop.
+  = ForLoop.
+>.
+
+WhileLoop = 'while' Comparison CodeBlock.
+ForLoop = 'for' Assignment ';' Comparison ';' Assignment CodeBlock.
+
+
+/* Tokens */
+int_const:    [Value: long       ] { Value := 0; }.
+float_const:  [Value: double     ] { Value := 0.0; }.
+string_const: [Value: tStringRef ] { Value := NoString; }.
+prog_name:    [Value: tStringRef ] { Value := NoString; }.
+identifier:   [Value: tIdent     ] { Value := NoIdent; }.
+separator:    [Dummy: int        ] { Dummy := 0; }.
+
+
+/* vim: set sw=2 ts=2 expandtab: */

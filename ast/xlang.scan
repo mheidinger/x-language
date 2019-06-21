@@ -1,0 +1,180 @@
+/* Project:  XLang
+ * Descr:    Scanner for XLang
+ * Author:   Max Heidinger <mail@max-heidinger.de>, Pascal Riesinger <mail@pascal-riesinger.de>
+ */ 
+SCANNER xlang_scan
+
+EXPORT {
+  /* code to be put into Scanner.h */
+  # include "Position.h"
+  # include "StringM.h"
+
+
+  void StartProgName(void);
+
+  /* Token Attributes.
+   * For each token with user defined attributes, we need a typedef for the
+   * token attributes.
+   * LPP extracts the token-attribute declaration from the parser specification.
+   * They are inserted here.
+   */
+  INSERT tScanAttribute
+}
+
+GLOBAL {
+  /* code to be put into Scanner.c */
+  # include <stdlib.h>
+  # include "Errors.h"
+
+  void StartProgName(void) { yyStart(PROG_NAME); }
+
+  /* Insert the routine computing "error-values" of attributes, in case the
+   * parser decides during error repair to insert a token.
+   */
+  INSERT ErrorAttribute
+}
+
+LOCAL {
+  /* user-defined local variables of the generated GetToken routine */
+  # define MAX_STRING_LEN 1024
+  char string[MAX_STRING_LEN];
+  int str_len = 0;
+  tPosition str_pos;
+}
+
+DEFAULT {
+  /* What happens if no scanner rule matches the input */
+  MessageI ("Illegal character",
+	    xxError, xlang_scan_Attribute.Position,
+	    xxCharacter, xlang_scan_TokenPtr);
+}
+
+EOF {
+  /* What should be done if the end-of-input-file has been reached? */
+
+  /* E.g.: check hat strings and comments are closed. */
+  switch (yyStartState) {
+  case STD:
+    /* ok */
+    break;
+  case COMMENT:
+    Message ("Error: unclosed comment",
+	     xxError, xlang_scan_Attribute.Position);
+    break;
+  case STRING:
+    Message ("Error: unclosed string",
+	    xxError, xlang_scan_Attribute.Position);
+    break;
+  case PROG_NAME:
+    Message ("Error: program name not terminated by newline",
+	    xxError, xlang_scan_Attribute.Position);
+    break;
+  default:
+    Message ("Error: that should not happen!",
+	     xxFatal, xlang_scan_Attribute.Position);
+    break;
+  }
+
+  /* implicit: return the EofToken */
+}
+
+DEFINE /* some abbreviations */
+  digit  = {0-9}.
+  letter = {A-Za-z}.
+  character = (digit | letter).
+
+/* define start states, note STD is defined by default */
+START COMMENT, STRING, PROG_NAME
+
+RULES
+
+#PROG_NAME# -{\n}* : {
+  str_len = xlang_scan_GetWord(&string[str_len]);
+}
+
+#PROG_NAME# \n : {
+  yyEol(0);
+  yyStart(STD);
+  xlang_scan_Attribute.prog_name.Value = PutString(string, str_len);
+  return prog_name;
+}
+
+/* Separators */
+#STD# \=\= (\=)+ : {
+  return separator;
+}
+
+/* Integers */
+#STD# digit+ : {
+  xlang_scan_GetWord (string);
+  xlang_scan_Attribute.int_const.Value = atol (string);
+  return int_const;
+}
+
+/* Float numbers */
+#STD# digit + "." digit * : {
+  xlang_scan_GetWord (string);
+  xlang_scan_Attribute.float_const.Value = atof (string);
+  return float_const;
+}
+
+/* Start of string literal */
+#STD# \" : {
+  yyStart(STRING);
+  str_len = 0; /* reset the string length counter */
+  str_pos = xlang_scan_Attribute.Position;
+}
+
+/* End of string literal */
+#STRING# \" : {
+  yyStart(STD);
+  xlang_scan_Attribute.string_const.Value = PutString(string, str_len);
+  xlang_scan_Attribute.string_const.Position = str_pos;
+  return string_const;
+}
+
+#STRING# \\ : {
+  string[str_len++] = '\\';
+}
+
+#STRING# \\ "n" : {
+  string[str_len++] = '\n';
+}
+
+#STRING# \\ \" : {
+  string[str_len++] = '"';
+}
+
+#STRING# -{\\\n"}* : {
+  str_len = xlang_scan_GetWord(&string[str_len]);
+}
+
+#STRING# \n : {
+  Message("Line break in string literal", xxError, xlang_scan_Attribute.Position);
+}
+
+/* Line comments */
+#STD# "//" ANY* :- {}
+
+/* C-style comment */
+#STD# "/*" :- {
+  yyStart(COMMENT);
+}
+
+#COMMENT# "*/" :- {
+  yyStart(STD);
+}
+
+#COMMENT# "/" | "*" | -{*/\n\t}+ :- {}
+
+
+INSERT RULES #STD#
+
+#STD# (letter | _) (digit | letter | _)* : {
+  xlang_scan_Attribute.identifier.Value = MakeIdent(xlang_scan_TokenPtr, xlang_scan_TokenLength);
+  return identifier;
+}
+
+/**********************************************************************/
+
+/* vim: set sw=2 :*/

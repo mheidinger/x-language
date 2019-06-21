@@ -1,0 +1,140 @@
+/* Project:  XLang
+ * Descr:    AST for XLang
+ * Author:   Max Heidinger <mail@max-heidinger.de>, Pascal Riesinger <mail@pascal-riesinger.de>
+ */
+MODULE abstract_syntax
+		  /* AST-files may be separated into modules, contained in various files */
+
+TREE   Tree  /* Name of the tree. Code is generated into files:
+	      * `Tree.h', `expr_tree.c', and `yyexpr_tree.h'
+              * In the further description we use the "generic" name `TREE'.
+  	      */
+IMPORT {
+  /* The target-code of this section is copied into the generated .h file
+   * before the declaration of the `typedef .... tTREE'
+   */
+  # include "StringM.h"
+} // IMPORT
+
+EXPORT {
+  /* The target-code of this section is copied into the generated .h file
+   * after the declaration of the `typedef .... tTREE', but before
+   * the declaration of the tree nodes struct's.
+   */
+
+  # include "Idents.h"
+  typedef enum eIOFlag {
+    NONE,
+    INPUT,
+    OUTPUT
+  } tIOFlag;
+
+
+  typedef enum eVarType {
+    INT,
+    FLOAT,
+    STRING
+  } tVarType;
+
+} // EXPORT
+
+GLOBAL {
+  /* The target-code of this section is copied into the generated .c file */
+
+} // GLOBAL
+
+BEGIN {
+  /* Target code to be placed in the BeginTREE() function */
+} // BEGIN
+
+CLOSE {
+  /* Target code to be placed in the CloseTREE() function */
+} // CLOSE
+
+PROPERTY INPUT  /* all attributes are parameters of the generate the mXX() routines */
+
+RULE  /* Here we define the node types */
+
+program =
+  [ Name : tStringRef ]
+  Declarations: DECLS
+  Instructions: INSTRS
+.
+
+/* List of declarations */
+DECLS = <
+  no_decls = . /*end of list*/ 
+  decls = Next: DECLS REV
+	  Decl: decl
+	  .
+>.
+
+decl =
+  [ IOFlag: tIOFlag ] 
+  [ Type: tVarType ]
+  Identifier: identifier
+.
+
+identifier =
+  [ Ident: tIdent ]
+.
+
+INSTRS = <
+  no_instrs = . /*end of list*/
+  instrs = Next: INSTRS REV
+           Instr: INSTR
+	   .
+>.
+
+INSTR = <
+  if_instr = Test: test
+             Then: INSTRS
+	     Else: INSTRS
+	     ELSEIFS
+	     .
+  assignment_instr = Lhs: identifier
+                     Rhs: EXPR
+		     .
+  while_instr = Test: test
+                Body: INSTRS
+		.
+  for_instr = Assignment: assignment_instr
+              Test: test
+	      IncAssignment: assignment_instr
+	      Body: INSTRS
+	      .
+>.
+
+test =
+  [ operator: tStringRef ]
+  Left: EXPR
+  Right: EXPR
+.
+
+ELSEIFS = <
+  no_elseifs = . /*end of list*/
+  elseifs = Next: ELSEIFS REV
+            Test: test
+	    Then: INSTRS
+	    .
+>.
+
+EXPR = <
+  int_const	= [ Value: int ]
+                  .
+  float_const = [ Value: float ]
+		 .
+  string_const = [ Value: tStringRef ]
+                 .
+  name = Ident: identifier
+         .
+  binary_expr	= [ Op  : char ]     /* binary expressions */
+		  Left : EXPR
+		  Right: EXPR
+  		.
+  unary_expr = [ Op: char]
+               Expr: EXPR
+	       .
+> .
+
+END abstract_syntax

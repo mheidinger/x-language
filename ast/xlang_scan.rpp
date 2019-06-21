@@ -1,0 +1,93 @@
+c
+# ifndef CommonScanAttrs
+# define CommonScanAttrs
+# endif
+
+# define zzCommonScanAttrs tPosition Position; CommonScanAttrs
+
+typedef struct { zzCommonScanAttrs long Value; } zz_xlang_scan_int_const;
+typedef struct { zzCommonScanAttrs double Value; } zz_xlang_scan_float_const;
+typedef struct { zzCommonScanAttrs tStringRef Value; } zz_xlang_scan_string_const;
+typedef struct { zzCommonScanAttrs tStringRef Value; } zz_xlang_scan_prog_name;
+typedef struct { zzCommonScanAttrs tIdent Value; } zz_xlang_scan_identifier;
+typedef struct { zzCommonScanAttrs int Dummy; } zz_xlang_scan_separator;
+
+typedef union {
+tPosition Position;
+struct { zzCommonScanAttrs } Common;
+zz_xlang_scan_int_const int_const;
+zz_xlang_scan_float_const float_const;
+zz_xlang_scan_string_const string_const;
+zz_xlang_scan_prog_name prog_name;
+zz_xlang_scan_identifier identifier;
+zz_xlang_scan_separator separator;
+} xlang_scan_tScanAttribute;
+
+# undef zzCommonScanAttrs
+
+extern void xlang_scan_ErrorAttribute ARGS((int Token, xlang_scan_tScanAttribute * pAttribute));
+%%
+void xlang_scan_ErrorAttribute
+# ifdef HAVE_ARGS
+ (int Token, xlang_scan_tScanAttribute * pAttribute)
+# else
+ (Token, pAttribute) int Token; xlang_scan_tScanAttribute * pAttribute;
+# endif
+{
+ pAttribute->Position = xlang_scan_Attribute.Position;
+ switch (Token) {
+ case /* int_const */ 1: 
+ pAttribute->int_const.Value = 0;
+  break;
+ case /* float_const */ 2: 
+ pAttribute->float_const.Value = 0.0;
+  break;
+ case /* string_const */ 3: 
+ pAttribute->string_const.Value = NoString;
+  break;
+ case /* prog_name */ 4: 
+ pAttribute->prog_name.Value = NoString;
+  break;
+ case /* identifier */ 5: 
+ pAttribute->identifier.Value = NoIdent;
+  break;
+ case /* separator */ 6: 
+ pAttribute->separator.Dummy = 0;
+  break;
+ }
+}
+%%
+1 S int_const int_const
+2 S float_const float_const
+3 S string_const string_const
+4 S prog_name prog_name
+5 S identifier identifier
+6 S separator separator
+7 N yy67 '->'
+8 N yy68 '<-'
+9 N yy69 'int'
+10 N yy70 'float'
+11 N yy71 'string'
+12 N yy72 ';'
+13 N yy73 '='
+14 N yy74 '+'
+15 N yy75 '-'
+16 N yy76 '*'
+17 N yy77 '/'
+18 N yy78 '%'
+19 N yy79 '^'
+20 N yy80 '('
+21 N yy81 ')'
+22 N yy82 'if'
+23 N yy83 '<'
+24 N yy84 '>'
+25 N yy85 '<='
+26 N yy86 '>='
+27 N yy87 '=='
+28 N yy88 '!='
+29 N yy89 '{'
+30 N yy90 '}'
+31 N yy91 else
+32 N yy92 'else if'
+33 N yy93 'while'
+34 N yy94 'for'
