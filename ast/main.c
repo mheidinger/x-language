@@ -10,6 +10,7 @@
 # include "Errors.h"
 # include "xlang_scan.h"
 # include "xlang_pars.h"
+# include "Tree.h"
 
 int main (int argc, char *argv[])
 {
@@ -30,13 +31,29 @@ int main (int argc, char *argv[])
       */
    }
 
-   StartProgName();
+   BeginTree (); /* see expr.ast */
 
+   StartProgName();
 
    errors = xlang_pars ();  /* the parser */
 
    printf ("parser returned: %d number of errors: %d\n",
-	   errors,GetCount (xxError));
+           errors,GetCount (xxError));
+
+   if (!CheckTree (TreeRoot)) {
+     fprintf (stderr, "Der Baum ist falsch aufgebaut\n");
+     exit (1);
+   }
+
+   /* ASCII output of the tree: */
+   WriteTree (stdout, TreeRoot);
+
+   /* set some parameters for the Tree Browser */
+   /*
+   SetDepthTree (20);
+   SetBoxTree   (100, 20);
+   DrawTree     (TreeRoot);
+   */
 
    return (errors == 0)? 0 : 1;
 }

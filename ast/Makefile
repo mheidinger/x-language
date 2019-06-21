@@ -31,11 +31,11 @@ all: $(MAIN)
 
 # Run the test suite
 test:
-	for f in test*; 	\
-	do			\
-	  echo "$$f ...";	\
-	  ./$(MAIN) $$f; echo;	\
-	done
+	./$(MAIN) test1
+	./$(MAIN) test2
+	- ./$(MAIN) test3
+	- ./$(MAIN) test4
+	- ./$(MAIN) test4
 
 ###############################################################################
 

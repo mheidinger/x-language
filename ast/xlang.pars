@@ -11,7 +11,7 @@ GLOBAL {
   # include <stdio.h>
   # include <math.h>
   # include "StringM.h"
-  # define M_PI acos(-1.0) 
+  # include "Tree.h"
 }
 
 PREC NONE  '<' '>' '==' '!='
@@ -21,93 +21,127 @@ PREC NONE  '<' '>' '==' '!='
      RIGHT '^'
 
 RULE
-root 	= Programm.
+root 	= p:Programm {=> {TreeRoot = p:tree;};}.
 
-Programm = NamenTeil separator VariablenTeil separator CodeTeil.
-
-NamenTeil = prog_name.
-VariablenTeil = DeclarationList.
+Programm = n:prog_name separator v:DeclarationList separator c:CodeTeil
+           {tree := mprogram(n:Value, ReverseTree(v:tree), ReverseTree(c:tree));}.
 
 DeclarationList = <
-   = Variable ';'.
-   = DeclarationList Variable ';'.
+   = v:Variable ';'
+     {tree := mdecls(mno_decls(), v:tree);}.
+   = d:DeclarationList v:Variable ';'
+     {tree := mdecls(d:tree, v:tree);}.
 >.
 
 Variable = <
-  = IOFlag identifier VariablenTyp.
+  = f:IOFlag i:identifier v:VariablenTyp
+    {tree := mdecl(f:Value, v:Value, midentifier(i:Value));}.
 >.
 
 IOFlag = <
-  ImportFlag = '->'.
-  ExportFlag = '<-'.
-  = .
+  ImportFlag = '->' {Value := INPUT;}.
+  ExportFlag = '<-' {Value := OUTPUT;}.
+  = {Value := NONE;}.
 >.
 
 VariablenTyp = <
-  = 'int'.
-  = 'float'.
-  = 'string'.
+  = 'int' {Value := INT;}.
+  = 'float' {Value := FLOAT;}.
+  = 'string' {Value := STRING;}.
 >.
 
 CodeTeil = <
-  = Instruction.
-  = CodeTeil Instruction.
+  = i:Instruction
+    {tree := minstrs(mno_instrs(), i:tree);}.
+  = c:CodeTeil i:Instruction
+    {tree := minstrs(c:tree, i:tree);}.
 >.
 
 Instruction = <
-  = Assignment ';'.
-  = Condition.
-  = Loop.
+  = a:Assignment ';'
+    {tree := a:tree;}.
+  = c:Condition
+    {tree := c:tree;}.
+  = l:Loop
+    {tree := l:tree;}.
 >.
 
-Assignment = identifier '=' Expression.
+Assignment = i:identifier '=' e:Expression
+             {tree := massignment_instr(midentifier(i:Value), e:tree);}.
 Expression = <
-  = int_const.
-  = float_const.
-  = string_const.
-  = identifier.
-  = Expression '+' Expression.
-  = Expression '-' Expression.
-  = Expression '*' Expression.
-  = Expression '/' Expression.
-  = Expression '%' Expression.
-  = Expression '^' Expression.
-  = '(' Expression ')'.
-  = '+' Expression PREC UNARY.
-  = '-' Expression PREC UNARY.
+  = i:int_const
+    {tree := mint_const(i:Value);}.
+  = f:float_const
+    {tree := mfloat_const(f:Value);}.
+  = s:string_const
+    {tree := mstring_const(s:Value);}.
+  = i:identifier
+    {tree := mname(midentifier(i:Value));}.
+  = l:Expression '+' r:Expression
+    {tree := mbinary_expr('+', l:tree, r:tree);}.
+  = l:Expression '-' r:Expression
+    {tree := mbinary_expr('-', l:tree, r:tree);}.
+  = l:Expression '*' r:Expression
+    {tree := mbinary_expr('*', l:tree, r:tree);}.
+  = l:Expression '/' r:Expression
+    {tree := mbinary_expr('/', l:tree, r:tree);}.
+  = l:Expression '%' r:Expression
+    {tree := mbinary_expr('%', l:tree, r:tree);}.
+  = l:Expression '^' r:Expression
+    {tree := mbinary_expr('^', l:tree, r:tree);}.
+  = '(' e:Expression ')'
+    {tree := e:tree;}.
+  = '+' e:Expression PREC UNARY
+    {tree := munary_expr('+', e:tree);}.
+  = '-' e:Expression PREC UNARY
+    {tree := munary_expr('-', e:tree);}.
 >.
 
-CodeBlock = '{' CodeTeil '}'.
+CodeBlock = '{' c:CodeTeil '}'
+            {tree := c:tree;}.
 
 Condition = <
-  = 'if' Comparison CodeBlock.
-  = 'if' Comparison CodeBlock else CodeBlock.
-  = 'if' Comparison CodeBlock ElseIfList CodeBlock.
-  = 'if' Comparison CodeBlock ElseIfList CodeBlock else CodeBlock.
+  = 'if' c:Comparison b:CodeBlock
+    {tree := mif_instr(c:tree, b:tree, mno_instrs(), mno_elseifs());}.
+  = 'if' c:Comparison b:CodeBlock else e:CodeBlock
+    {tree := mif_instr(c:tree, b:tree, e:tree, mno_elseifs());}.
+  = 'if' c:Comparison b:CodeBlock l:ElseIfList
+    {tree := mif_instr(c:tree, b:tree, mno_instrs(), ReverseTree(l:tree));}.
+  = 'if' c:Comparison b:CodeBlock l:ElseIfList else e:CodeBlock
+    {tree := mif_instr(c:tree, b:tree, e:tree, ReverseTree(l:tree));}.
 >.
 
 ElseIfList = <
-  = 'else if' CodeBlock.
-  = ElseIfList 'else if' CodeBlock.
+  = 'else if' c:Comparison b:CodeBlock
+    {tree := melseifs(mno_elseifs(), c:tree, b:tree);}.
+  = l:ElseIfList 'else if' c:Comparison b:CodeBlock
+    {tree := melseifs(l:tree, c:tree, b:tree);}.
 >.
 
 Comparison = <
-  = Expression '<' Expression. 
-  = Expression '>' Expression. 
-  = Expression '<=' Expression. 
-  = Expression '>=' Expression. 
-  = Expression '==' Expression. 
-  = Expression '!=' Expression. 
+  = l:Expression '<' r:Expression
+    {tree := mtest(PutString1("<"), l:tree, r:tree);}.
+  = l:Expression '>' r:Expression
+    {tree := mtest(PutString1(">"), l:tree, r:tree);}.
+  = l:Expression '<=' r:Expression
+    {tree := mtest(PutString1("<="), l:tree, r:tree);}.
+  = l:Expression '>=' r:Expression
+    {tree := mtest(PutString1(">="), l:tree, r:tree);}.
+  = l:Expression '==' r:Expression
+    {tree := mtest(PutString1("=="), l:tree, r:tree);}.
+  = l:Expression '!=' r:Expression
+    {tree := mtest(PutString1("!="), l:tree, r:tree);}.
 >.
 
 Loop = <
-  = WhileLoop.
-  = ForLoop.
+  = w:WhileLoop {tree := w:tree;}.
+  = f:ForLoop {tree := f:tree;}.
 >.
 
-WhileLoop = 'while' Comparison CodeBlock.
-ForLoop = 'for' Assignment ';' Comparison ';' Assignment CodeBlock.
-
+WhileLoop = 'while' c:Comparison b:CodeBlock
+            {tree := mwhile_instr(c:tree, b:tree);}.
+ForLoop = 'for' a:Assignment ';' c:Comparison ';' i:Assignment b:CodeBlock
+          {tree := mfor_instr(a:tree, c:tree, i:tree, b:tree);}.
 
 /* Tokens */
 int_const:    [Value: long       ] { Value := 0; }.
@@ -117,5 +151,26 @@ prog_name:    [Value: tStringRef ] { Value := NoString; }.
 identifier:   [Value: tIdent     ] { Value := NoIdent; }.
 separator:    [Dummy: int        ] { Dummy := 0; }.
 
+/* non-terminal attributes */
+MODULE attributes
+PROPERTY SYN
+DECLARE
+ DeclarationList
+ Variable
+ Instruction
+ Assignment
+ Condition
+ ElseIfList
+ Loop
+ WhileLoop
+ ForLoop
+ Expression
+ Comparison
+ CodeBlock
+ Programm
+ CodeTeil = [tree: tTree].
+ IOFlag = [Value: tIOFlag].
+ VariablenTyp = [Value: tVarType].
+END attributes
 
 /* vim: set sw=2 ts=2 expandtab: */

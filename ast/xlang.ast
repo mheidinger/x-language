@@ -90,7 +90,7 @@ INSTR = <
   if_instr = Test: test
              Then: INSTRS
 	     Else: INSTRS
-	     ELSEIFS
+	     ElseIfs: ELSEIFS
 	     .
   assignment_instr = Lhs: identifier
                      Rhs: EXPR
